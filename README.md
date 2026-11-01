@@ -47,20 +47,23 @@ Users can register an account, log in to receive an access token, and manage the
 
 ```text
 taskflow-api/
-│
 ├── app/
-│   ├── main.py
+│   ├── routers/
+│   │   ├── auth.py
+│   │   └── tasks.py
+│   ├── __init__.py
+│   ├── config.py
+│   ├── crud.py
 │   ├── database.py
+│   ├── dependencies.py
+│   ├── main.py
 │   ├── models.py
 │   ├── schemas.py
-│   ├── auth.py
-│   ├── dependencies.py
-│   └── routers/
-│
+│   └── security.py
 ├── tests/
+│   ├── conftest.py
 │   ├── test_auth.py
 │   └── test_tasks.py
-│
 ├── .env.example
 ├── .gitignore
 ├── main.py
@@ -68,18 +71,13 @@ taskflow-api/
 └── README.md
 ```
 
-*Note: The tree above illustrates the intended structure. Adjust filenames and folders to match your actual project.*
-
 ## ⚙️ Getting Started
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/taskflow-api.git
+git clone https://github.com/kirubanandhan016/taskflow-api.git
 cd taskflow-api
-```
-
-Replace `YOUR-USERNAME` with your GitHub username.
 
 ### 2. Create a Virtual Environment
 
@@ -176,7 +174,7 @@ The test suite covers:
 - Request validation errors
 - API documentation availability
 
-**Verified test result:** 13 tests passed in the local test run.
+The repository includes tests for registration, login, authentication, task CRUD, user isolation, validation, and API documentation. Run the command above in your environment to verify the current result.
 
 ## 🔒 Security Considerations
 
