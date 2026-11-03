@@ -40,10 +40,13 @@ def get_current_user(
             credentials.credentials,
             request.app.state.jwt_secret_key,
             algorithms=[ALGORITHM],
-            options={"require": ["exp", "sub"]},
+            options={"require": ["exp", "sub", "iat"]},
         )
-        user_id = int(payload["sub"])
-    except (jwt.InvalidTokenError, TypeError, ValueError):
+        subject = payload.get("sub")
+        if not isinstance(subject, str) or not subject.isdigit():
+            raise unauthorized
+        user_id = int(subject)
+    except (jwt.InvalidTokenError, AttributeError, TypeError, ValueError):
         raise unauthorized from None
 
     user = crud.get_user_by_id(session, user_id)
