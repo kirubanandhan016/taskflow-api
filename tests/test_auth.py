@@ -95,10 +95,12 @@ def test_protected_route_rejects_invalid_token(client):
 
 
 def test_protected_route_rejects_expired_token(client):
+    now = datetime.now(timezone.utc)
     expired_token = jwt.encode(
         {
             "sub": "1",
-            "exp": datetime.now(timezone.utc) - timedelta(seconds=1),
+            "iat": now - timedelta(minutes=5),
+            "exp": now - timedelta(seconds=1),
         },
         client.app.state.jwt_secret_key,
         algorithm=ALGORITHM,
@@ -106,6 +108,23 @@ def test_protected_route_rejects_expired_token(client):
 
     response = client.get(
         "/auth/me", headers={"Authorization": f"Bearer {expired_token}"}
+    )
+
+    assert response.status_code == 401
+
+
+def test_protected_route_rejects_token_without_iat(client):
+    token = jwt.encode(
+        {
+            "sub": "1",
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=5),
+        },
+        client.app.state.jwt_secret_key,
+        algorithm=ALGORITHM,
+    )
+
+    response = client.get(
+        "/auth/me", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 401
