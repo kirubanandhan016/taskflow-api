@@ -1,216 +1,180 @@
-# 🚀 TaskFlow API
+# TaskFlow API
 
-### A Secure Task Management REST API Built with FastAPI
+Task management REST API built with Python, FastAPI, SQLAlchemy, and SQLite. It demonstrates account registration, token-based authentication, protected task CRUD, resource ownership, and automated API tests.
 
-A backend application that provides secure user authentication and task management through RESTful APIs. Built with **FastAPI, SQLAlchemy, SQLite, and JWT authentication**, with automated tests covering authentication, authorization, and task operations.
+## Features
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/FastAPI-Framework-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/SQLAlchemy-ORM-D71F00?style=for-the-badge" alt="SQLAlchemy" />
-  <img src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Pytest-Testing-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white" alt="Pytest" />
-</p>
+- User registration and login
+- Argon2 password hashing through pwdlib
+- Signed JWT bearer access tokens with required `sub`, `iat`, and `exp` claims
+- User-scoped task creation, retrieval, update, and deletion
+- Task filtering by status and priority, with pagination
+- SQLAlchemy ORM and request-scoped database sessions
+- Pydantic request validation
+- Consistent HTTP error responses
+- Pytest API and authorization tests
+- GitHub Actions test workflow
 
----
+## Technology
 
-## 📌 Overview
+Python 3.10+ · FastAPI · SQLAlchemy · SQLite · PyJWT · pwdlib/Argon2 · Pydantic · Pytest · HTTPX · Uvicorn
 
-**TaskFlow API** is a RESTful backend project designed to demonstrate core backend development concepts, including authentication, protected endpoints, database integration, input validation, and automated testing.
+## Architecture
 
-Users can register an account, log in to receive an access token, and manage their own tasks through authenticated API endpoints.
+- `app/routers/`: HTTP route handlers
+- `app/schemas.py`: Pydantic request and response models
+- `app/models.py`: SQLAlchemy user and task entities
+- `app/crud.py`: database operations, separated from HTTP concerns
+- `app/security.py`: password hashing and JWT issuance
+- `app/dependencies.py`: database session and bearer-token authentication dependencies
+- `app/config.py`: environment-based configuration
+- `app/database.py`: SQLAlchemy engine and session factory
+- `tests/`: authentication, authorization, and task behavior tests
 
-## ✨ Features
+## Run locally
 
-- 🔐 **User Authentication** — User registration and login.
-- 🪪 **JWT Authorization** — Bearer-token authentication for protected endpoints.
-- 👤 **User-Specific Access** — Users can access and manage only their own tasks.
-- ✅ **Task Management** — Create, retrieve, update, and delete tasks.
-- 🗄️ **Database Integration** — SQLAlchemy ORM with SQLite.
-- 🛡️ **Input Validation** — Request validation and structured HTTP error responses.
-- 📚 **Interactive API Documentation** — Swagger UI and OpenAPI documentation.
-- 🧪 **Automated Testing** — Pytest coverage for authentication, authorization, and task operations.
-
-## 🛠️ Tech Stack
-
-| Technology | Purpose |
-|---|---|
-| Python | Backend programming |
-| FastAPI | REST API framework |
-| SQLAlchemy | Database ORM |
-| SQLite | Relational database |
-| JWT | Token-based authentication |
-| Pytest | Automated testing |
-| Uvicorn | ASGI development server |
-
-## 📂 Project Structure
-
-```text
-taskflow-api/
-├── app/
-│   ├── routers/
-│   │   ├── auth.py
-│   │   └── tasks.py
-│   ├── __init__.py
-│   ├── config.py
-│   ├── crud.py
-│   ├── database.py
-│   ├── dependencies.py
-│   ├── main.py
-│   ├── models.py
-│   ├── schemas.py
-│   └── security.py
-├── tests/
-│   ├── conftest.py
-│   ├── test_auth.py
-│   └── test_tasks.py
-├── .env.example
-├── .gitignore
-├── main.py
-├── requirements.txt
-└── README.md
-```
-
-## ⚙️ Getting Started
-
-### 1. Clone the Repository
+Clone the repository and create a virtual environment:
 
 ```bash
 git clone https://github.com/kirubanandhan016/taskflow-api.git
 cd taskflow-api
+python -m venv .venv
 ```
 
-### 2. Create a Virtual Environment
+Activate the environment:
 
-**Windows PowerShell**
+Windows PowerShell:
 
 ```powershell
-python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install Dependencies
+macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+Install dependencies:
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-### 4. Configure Environment Variables
+## Configuration
 
-Create a local `.env` file from the example:
+Copy the environment template:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Generate a strong, unique JWT secret:
+Generate a unique signing secret:
 
 ```bash
 python -c "import secrets; print(secrets.token_urlsafe(48))"
 ```
 
-Add the generated value to your local `.env` file:
+Set `JWT_SECRET_KEY` in `.env` to the generated value. The application requires a unique secret of at least 32 characters and a positive token lifetime. Do not commit `.env`, passwords, or bearer tokens.
 
-```env
-JWT_SECRET_KEY=your_generated_secret_here
-```
+The default local database is `sqlite:///./taskflow.db`. Set `DATABASE_URL` to use another SQLAlchemy-compatible database URL.
 
-Use the other environment variables documented in `.env.example`, if required by your application.
-
-**Security:** Never commit `.env`, access tokens, passwords, or secret keys to GitHub. Keep `.env.example` free of real credentials.
-
-### 5. Start the API Server
-
-From the project root, run:
+## Start the API
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-The development server will be available at:
+- Base URL: `http://127.0.0.1:8000`
+- Swagger UI: `http://127.0.0.1:8000/docs`
+- ReDoc: `http://127.0.0.1:8000/redoc`
 
-- **API Base URL:** http://127.0.0.1:8000
-- **Swagger UI:** http://127.0.0.1:8000/docs
-- **ReDoc:** http://127.0.0.1:8000/redoc
+## Authentication flow
 
-## 🔗 API Endpoints
+1. Register using `POST /auth/register` with email and password.
+2. Log in using `POST /auth/login` with the same JSON credential fields.
+3. Read `access_token` from the response.
+4. Send `Authorization: Bearer <access_token>` with protected requests.
+5. The server verifies the signature and required `exp`, `sub`, and `iat` claims, resolves the user from the database, and then applies endpoint authorization.
+
+Passwords are hashed using Argon2; plaintext passwords are not stored. JWTs use HS256 and the application-configured secret. Access tokens are stateless and short-lived (30 minutes by default). There is no refresh-token or server-side revocation endpoint in this project.
+
+## API endpoints
 
 ### Authentication
 
-| Method | Endpoint | Description | Access |
+| Method | Endpoint | Access | Purpose |
 |---|---|---|---|
-| POST | `/auth/register` | Register a new user | Public |
-| POST | `/auth/login` | Authenticate and receive an access token | Public |
-| GET | `/auth/me` | Retrieve the current authenticated user | Protected |
+| POST | `/auth/register` | Public | Register a user |
+| POST | `/auth/login` | Public | Exchange credentials for a bearer token |
+| GET | `/auth/me` | Bearer token | Retrieve the current user |
 
-### Task Management
+### Tasks
 
-| Method | Endpoint | Description | Access |
+| Method | Endpoint | Access | Purpose |
 |---|---|---|---|
-| POST | `/tasks` | Create a task | Protected |
-| GET | `/tasks` | List the current user's tasks | Protected |
-| GET | `/tasks/{task_id}` | Retrieve a task by ID | Protected |
-| PATCH | `/tasks/{task_id}` | Update a task | Protected |
-| DELETE | `/tasks/{task_id}` | Delete a task | Protected |
+| POST | `/tasks` | Bearer token | Create a task |
+| GET | `/tasks` | Bearer token | List and filter the current user's tasks |
+| GET | `/tasks/{task_id}` | Bearer token | Retrieve an owned task |
+| PATCH | `/tasks/{task_id}` | Bearer token | Update an owned task |
+| DELETE | `/tasks/{task_id}` | Bearer token | Delete an owned task |
 
-*Protected endpoints require a valid Bearer access token.*
+Task list supports `status`, `priority`, `offset`, and `limit` query parameters. A user cannot read, modify, or delete another user's task.
 
-## 🧪 Running Tests
+## Example request
 
-Run the automated test suite from the project root:
+Register:
+
+```http
+POST /auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "correct-horse-42"
+}
+```
+
+Create a task:
+
+```http
+POST /tasks
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+  "title": "Prepare backend interview",
+  "description": "Review FastAPI and SQLAlchemy",
+  "priority": "high"
+}
+```
+
+## Error handling
+
+- `401 Unauthorized`: missing, invalid, malformed, or expired bearer token
+- `403 Forbidden`: task exists but belongs to another user
+- `404 Not Found`: task does not exist
+- `409 Conflict`: duplicate account registration
+- `422 Unprocessable Entity`: invalid request data
+
+## Tests
+
+Run:
 
 ```bash
 python -m pytest -v
 ```
 
-The test suite covers:
+The tests cover registration, duplicate accounts, input validation, successful and unsuccessful login, missing/invalid/expired tokens, token claim requirements, task CRUD, and per-user access boundaries. GitHub Actions runs the suite on pushes and pull requests.
 
-- Successful and duplicate user registration
-- Successful and unsuccessful login
-- Missing and invalid authentication tokens
-- Current-user retrieval
-- Task creation and CRUD operations
-- User-specific task isolation
-- Unauthorized access to another user's tasks
-- Request validation errors
-- API documentation availability
+## Scope and limitations
 
-The repository includes tests for registration, login, authentication, task CRUD, user isolation, validation, and API documentation. Run the command above in your environment to verify the current result.
+This is a learning and portfolio project, not a production identity platform. Rate limiting, refresh-token rotation, immediate token revocation, structured security audit logging, and production deployment hardening are not currently implemented.
 
-## 🔒 Security Considerations
+## Author
 
-- JWT secrets are loaded through environment configuration.
-- Protected endpoints require authentication.
-- Task access is restricted to the authenticated user.
-- Passwords should be stored using secure password hashing.
-- Local environment files and database files are excluded from version control.
-
-## 🎯 What This Project Demonstrates
-
-This project showcases practical backend development skills:
-
-- Designing RESTful API endpoints
-- Implementing token-based authentication
-- Integrating an ORM with a relational database
-- Validating requests and handling HTTP errors
-- Enforcing resource-level authorization
-- Writing automated API tests
-- Managing environment configuration and Git exclusions
-
-## 👨‍💻 Author
-
-**Kiruba Harish**
-
-Aspiring Python Backend Developer
-
-Interested in building secure, maintainable backend applications and REST APIs.
+**Kirubanandhan V**
 
 - GitHub: [@kirubanandhan016](https://github.com/kirubanandhan016)
-- LinkedIn: [Connect with me](https://www.linkedin.com/in/kirubanandhan-v-98bb83443/)
-
----
-
-<p align="center">
-  <strong>Built with Python and FastAPI.</strong><br/>
-  Learning, building, and improving one API at a time. 🚀
-</p>
+- Portfolio: [kirubanandhan016.github.io](https://kirubanandhan016.github.io/)
+- LinkedIn: [Kirubanandhan V](https://www.linkedin.com/in/kirubanandhan-v-98bb83443/)
