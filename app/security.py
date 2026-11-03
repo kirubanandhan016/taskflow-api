@@ -26,9 +26,19 @@ def burn_password_verification(password: str) -> None:
 def create_access_token(
     subject: str, secret_key: str, expires_in_minutes: int
 ) -> str:
-    expires_at = datetime.now(timezone.utc) + timedelta(minutes=expires_in_minutes)
+    if not secret_key or len(secret_key) < 32:
+        raise ValueError("JWT signing secret must contain at least 32 characters.")
+    if expires_in_minutes <= 0:
+        raise ValueError("Access-token lifetime must be a positive integer.")
+
+    issued_at = datetime.now(timezone.utc)
+    expires_at = issued_at + timedelta(minutes=expires_in_minutes)
     return jwt.encode(
-        {"sub": subject, "exp": expires_at},
+        {
+            "sub": str(subject),
+            "iat": issued_at,
+            "exp": expires_at,
+        },
         secret_key,
         algorithm=ALGORITHM,
     )
