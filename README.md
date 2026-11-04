@@ -180,6 +180,8 @@ The test suite covers:
 
 The repository includes tests for registration, login, authentication, task CRUD, user isolation, validation, and API documentation. GitHub Actions runs these tests against isolated SQLite databases and separately starts the application against PostgreSQL 16 to verify connectivity and creation of the `users` and `tasks` tables.
 
+JWTs are signed with HS256 and include required `sub`, `iat`, and `exp` claims. Protected requests reject tokens missing required claims or containing a non-numeric user subject. Access tokens are stateless; refresh-token rotation and server-side revocation are not implemented.
+
 ## 🔒 Security Considerations
 
 - JWT secrets are loaded through environment configuration.
