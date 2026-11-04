@@ -1,8 +1,10 @@
 # 🚀 TaskFlow API
 
+[![Python tests](https://github.com/kirubanandhan016/taskflow-api/actions/workflows/tests.yml/badge.svg)](https://github.com/kirubanandhan016/taskflow-api/actions/workflows/tests.yml)
+
 ### A Secure Task Management REST API Built with FastAPI
 
-A backend application that provides secure user authentication and task management through RESTful APIs. Built with **FastAPI, SQLAlchemy, SQLite, and JWT authentication**, with automated tests covering authentication, authorization, and task operations.
+A backend application that provides secure user authentication and task management through RESTful APIs. Built with **FastAPI, SQLAlchemy, SQLite/PostgreSQL, and JWT authentication**, with automated tests covering authentication, authorization, and task operations.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
@@ -38,7 +40,8 @@ Users can register an account, log in to receive an access token, and manage the
 | Python | Backend programming |
 | FastAPI | REST API framework |
 | SQLAlchemy | Database ORM |
-| SQLite | Relational database |
+| SQLite | Default local relational database |
+| PostgreSQL | Supported database via `DATABASE_URL` and psycopg |
 | JWT | Token-based authentication |
 | Pytest | Automated testing |
 | Uvicorn | ASGI development server |
@@ -115,7 +118,7 @@ Add the generated value to your local `.env` file:
 JWT_SECRET_KEY=your_generated_secret_here
 ```
 
-Use the other environment variables documented in `.env.example`, if required by your application.
+Use the other environment variables documented in `.env.example`, if required by your application. SQLite is the default for local development. To use PostgreSQL, set `DATABASE_URL` to a SQLAlchemy URL such as `postgresql+psycopg://user:password@localhost:5432/taskflow`.
 
 **Security:** Never commit `.env`, access tokens, passwords, or secret keys to GitHub. Keep `.env.example` free of real credentials.
 
@@ -175,7 +178,7 @@ The test suite covers:
 - Request validation errors
 - API documentation availability
 
-The repository includes tests for registration, login, authentication, task CRUD, user isolation, validation, and API documentation. Run the command above in your environment to verify the current result.
+The repository includes tests for registration, login, authentication, task CRUD, user isolation, validation, and API documentation. GitHub Actions runs these tests against isolated SQLite databases and separately starts the application against PostgreSQL 16 to verify connectivity and creation of the `users` and `tasks` tables.
 
 ## 🔒 Security Considerations
 
