@@ -46,6 +46,20 @@ taskflow-api/
 └── README.md
 ```
 
+## Request flow and architecture
+
+```mermaid
+flowchart TD
+    C[API client] --> R[FastAPI routers]
+    R --> A[JWT authentication dependency]
+    R --> CRUD[CRUD operations]
+    CRUD --> ORM[SQLAlchemy models]
+    ORM --> DB[(SQLite / PostgreSQL)]
+    T[Pytest suite] --> R
+```
+
+The routers define the HTTP interface, authentication dependencies identify the current user, and CRUD operations apply user-scoped database access through SQLAlchemy.
+
 ## Run locally
 
 Clone the repository and create a virtual environment:
