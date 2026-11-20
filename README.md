@@ -116,7 +116,7 @@ uvicorn app.main:app --reload
 
 ## Run with Docker Compose
 
-Docker Compose starts PostgreSQL and the FastAPI application. The current app creates SQLAlchemy tables at startup; Alembic migrations are not implemented yet.
+Docker Compose starts PostgreSQL and the FastAPI application. The production application uses Alembic migrations. The Docker entrypoint runs `alembic upgrade head` before starting Uvicorn. The test app factory retains an explicit schema-creation option for isolated tests.
 
 PowerShell:
 
@@ -135,6 +135,16 @@ docker compose up --build
 ```
 
 Open `http://localhost:8000/docs`. Stop with `docker compose down`; add `-v` only when you intentionally want to delete the local PostgreSQL data volume. Use a URL-safe alphanumeric database password for this Compose example and never reuse local credentials in production.
+
+## Database migrations
+
+After setting `DATABASE_URL` and `JWT_SECRET_KEY`, apply the versioned schema:
+
+```bash
+alembic upgrade head
+```
+
+Inspect the current revision with `alembic current`. Generate a candidate migration after model changes with `alembic revision --autogenerate -m "describe change"`, then review the generated operations before committing.
 
 ## API endpoints
 
