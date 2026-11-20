@@ -10,14 +10,14 @@ A task-management REST API built with Python and FastAPI. The project demonstrat
 - JWT bearer authentication for protected endpoints
 - Create, list, retrieve, update, and delete tasks
 - User-specific task access and ownership checks
-- SQLAlchemy ORM with SQLite by default and PostgreSQL configuration support
+- SQLAlchemy ORM with SQLite for local development and PostgreSQL support
 - Pydantic request validation and structured HTTP errors
 - Interactive Swagger UI and OpenAPI documentation
 - Pytest coverage for authentication, authorization, validation, and task workflows
 
 ## Technology stack
 
-Python · FastAPI · SQLAlchemy · SQLite · PostgreSQL · JWT · Pydantic · Pytest · Uvicorn
+Python · FastAPI · SQLAlchemy · Alembic · SQLite · PostgreSQL · Docker · JWT · Pydantic · Pytest · Uvicorn
 
 ## Project structure
 
@@ -167,7 +167,7 @@ Protected endpoints require an `Authorization: Bearer <access_token>` header. Re
 python -m pytest -v
 ```
 
-The repository's GitHub Actions workflow runs automated tests using isolated SQLite test data and performs a PostgreSQL connectivity/schema smoke check. Review the workflow file for the exact CI steps.
+The GitHub Actions workflow runs the API tests, applies Alembic migrations to PostgreSQL 16, verifies the migration revision and required tables, starts the FastAPI application against PostgreSQL for a documentation endpoint smoke test, and builds the Docker image. The `/docs` check verifies application startup and documentation availability; it is not a complete end-to-end test of every API workflow against PostgreSQL.
 
 ## Engineering concepts demonstrated
 
@@ -181,7 +181,7 @@ The repository's GitHub Actions workflow runs automated tests using isolated SQL
 
 ## Scope and future improvements
 
-This is a learning and portfolio project, not a production service. Potential next improvements include Alembic migrations, pagination and filtering, refresh-token rotation and revocation, rate limiting, structured logging, and deployment hardening.
+This is a learning and portfolio project, not a production service. Potential next improvements include pagination and filtering, refresh-token rotation and revocation, rate limiting, structured logging, broader PostgreSQL-backed workflow tests, and deployment hardening.
 
 ## Author
 
