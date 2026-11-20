@@ -15,6 +15,7 @@ def create_app(
     database_url: str | None = None,
     secret_key: str | None = None,
     access_token_expire_minutes: int | None = None,
+    create_schema: bool = True,
 ) -> FastAPI:
     settings = load_settings()
     selected_database_url = (
@@ -42,7 +43,8 @@ def create_app(
             application.state.jwt_secret_key = selected_secret_key
             application.state.access_token_expire_minutes = expiration
             application.state.session_factory = session_factory
-            Base.metadata.create_all(bind=engine)
+            if create_schema:
+                Base.metadata.create_all(bind=engine)
             yield
         finally:
             engine.dispose()
@@ -64,4 +66,4 @@ def create_app(
     return application
 
 
-app = create_app()
+app = create_app(create_schema=False)
