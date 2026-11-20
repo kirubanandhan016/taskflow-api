@@ -114,6 +114,28 @@ uvicorn app.main:app --reload
 - Swagger UI: http://127.0.0.1:8000/docs
 - ReDoc: http://127.0.0.1:8000/redoc
 
+## Run with Docker Compose
+
+Docker Compose starts PostgreSQL and the FastAPI application. The current app creates SQLAlchemy tables at startup; Alembic migrations are not implemented yet.
+
+PowerShell:
+
+```powershell
+$env:POSTGRES_PASSWORD = "use-a-long-local-password"
+$env:JWT_SECRET_KEY = python -c "import secrets; print(secrets.token_urlsafe(48))"
+docker compose up --build
+```
+
+macOS/Linux:
+
+```bash
+export POSTGRES_PASSWORD='use-a-long-local-password'
+export JWT_SECRET_KEY="$(python -c 'import secrets; print(secrets.token_urlsafe(48))')"
+docker compose up --build
+```
+
+Open `http://localhost:8000/docs`. Stop with `docker compose down`; add `-v` only when you intentionally want to delete the local PostgreSQL data volume. Use a URL-safe alphanumeric database password for this Compose example and never reuse local credentials in production.
+
 ## API endpoints
 
 | Method | Endpoint | Description |
