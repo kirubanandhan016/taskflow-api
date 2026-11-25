@@ -181,7 +181,7 @@ The repository's GitHub Actions workflow runs automated tests using isolated SQL
 
 ## Scope and future improvements
 
-This is a learning and portfolio project, not a production service. Potential next improvements include Alembic migrations, pagination and filtering, refresh-token rotation and revocation, rate limiting, structured logging, and deployment hardening.
+This is a learning and portfolio project, not a production service. Potential next improvements include pagination and filtering, refresh-token rotation and revocation, rate limiting, structured logging, stronger observability, and deployment hardening.
 
 ## Author
 
@@ -192,3 +192,5 @@ Entry-Level Python Backend Developer
 - Portfolio: https://kirubanandhan016.github.io/
 - LinkedIn: https://www.linkedin.com/in/kirubanandhan-v-98bb83443/
 - Email: kirubanandhan016@gmail.com
+
+
