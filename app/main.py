@@ -61,6 +61,10 @@ def create_app(
         version="1.0.0",
         lifespan=lifespan,
     )
+    @application.get("/health", tags=["health"], summary="Health check")
+    def health_check() -> dict[str, str]:
+        return {"status": "ok"}
+
     application.include_router(auth.router)
     application.include_router(tasks.router)
     return application
