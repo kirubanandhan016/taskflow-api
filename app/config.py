@@ -25,8 +25,14 @@ def load_settings() -> Settings:
     if expiration <= 0:
         raise ValueError("ACCESS_TOKEN_EXPIRE_MINUTES must be a positive integer.")
 
+    database_url = os.getenv("DATABASE_URL", "sqlite:///./taskflow.db")
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql+psycopg://", 1)
+    elif database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+
     return Settings(
-        database_url=os.getenv("DATABASE_URL", "sqlite:///./taskflow.db"),
+        database_url=database_url,
         jwt_secret_key=os.getenv("JWT_SECRET_KEY"),
         access_token_expire_minutes=expiration,
     )
