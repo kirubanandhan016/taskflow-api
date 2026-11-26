@@ -192,3 +192,17 @@ Entry-Level Python Backend Developer
 - Portfolio: https://kirubanandhan016.github.io/
 - LinkedIn: https://www.linkedin.com/in/kirubanandhan-v-98bb83443/
 - Email: kirubanandhan016@gmail.com
+
+
+## Portfolio documentation
+
+- [Architecture diagram](docs/ARCHITECTURE.md)
+- [Database ER diagram](docs/ER_DIAGRAM.md)
+- [API request examples](docs/API_EXAMPLES.md)
+- Swagger/OpenAPI: run the API and open `/docs`; ReDoc is at `/redoc`.
+- [Environment template](.env.example); copy to `.env` and never commit real secrets.
+- Tests: `python -m pytest -v`; see `tests/` and GitHub Actions.
+
+## Screenshots and deployment
+
+A verified public deployment URL and committed screenshots are not available yet. Capture Swagger UI and representative successful/error API responses after running locally, redact tokens and personal data, and store approved images under `docs/screenshots/`. Add a live URL here only after deployment and health-check verification.
