@@ -206,3 +206,23 @@ Entry-Level Python Backend Developer
 ## Screenshots and deployment
 
 A verified public deployment URL and committed screenshots are not available yet. Capture Swagger UI and representative successful/error API responses after running locally, redact tokens and personal data, and store approved images under `docs/screenshots/`. Add a live URL here only after deployment and health-check verification.
+
+
+## Deploy to Render
+
+This repository includes a Render Blueprint at [`render.yaml`](render.yaml).
+
+1. Sign in to [Render](https://render.com/) and choose **New → Blueprint**.
+2. Connect your GitHub account and select `kirubanandhan016/taskflow-api`.
+3. Review the web service and PostgreSQL database defined in `render.yaml`, then apply the Blueprint.
+4. Wait for the build and deployment to finish. Render runs Alembic migrations before starting Uvicorn.
+5. Open the generated service URL and verify `/health`, `/docs`, and `/redoc`.
+6. Copy the verified public URL into the Deployment section below.
+
+Render generates `JWT_SECRET_KEY` and injects the managed PostgreSQL connection string. Do not paste secrets into GitHub or chat. The included free database plan is intended for a demonstration and may have provider-specific expiry or resource limits; use a paid persistent database plan for a portfolio deployment you need to keep available.
+
+### Deployment status
+
+- Provider configuration: committed in `render.yaml`.
+- Public service URL: pending creation in the Render dashboard.
+- Health check: `/health` (verify after deployment).
